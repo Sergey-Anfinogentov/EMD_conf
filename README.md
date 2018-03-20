@@ -1,2 +1,3 @@
 # EMD_conf
-A code for estimating confidence intervals for EMD
+This repository contains EMD implementation in IDL language.
+The code also allows for estimating confidence intervals for EMD modes in the presence of white and colored noise components.
