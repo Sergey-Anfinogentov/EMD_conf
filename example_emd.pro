@@ -12,7 +12,7 @@ pro example_emd
   trend_emd = modes[*,-1]
   
   
-  ;-------PLOTTONG------------
+  ;-------PLOTTING------------
   window,0,  xsize = 1000, ysize =700
   !p.BACKGROUND =255
   !p.color = 0
