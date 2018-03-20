@@ -10,7 +10,7 @@
   ;
   ;
   ;
-  ; :Authors: Dmitry Kolotkov (D.Kolotkov@warwick.ac.uk) & Sergey Anfinogentov (anfinogentov@iszf.irk.ru) 
+  ; :Authors: Dmitrii Kolotkov (D.Kolotkov@warwick.ac.uk) & Sergey Anfinogentov (anfinogentov@iszf.irk.ru) 
   ;-
 pro emd_synthetic_model, t, x, x_clean, trend_clean
   N=400l                ;N= NUMBER OF DATAPOINTS
