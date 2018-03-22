@@ -21,7 +21,7 @@ function emd_energy_spectrum, modes, dt
   period = dblarr(n)
   for i =0, n-1 do begin
     n_ext=float((size(extrema(modes[*,i])))[1])
-    period[i]=2d*length / n_ext
+    period[i]=(emd_period_energy(modes[*,i])).period
     energy[i] = stddev(modes[*,i])^2
   endfor
   return,{period:period*dt,energy:energy}

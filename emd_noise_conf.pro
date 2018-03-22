@@ -212,7 +212,7 @@ function emd_noise_conf, n, alpha, energy = energy, nsamples = nsamples, fap = f
     for i=0,(size(tmp))[2]-1 do begin
       length=float(n_elements(fnoise))
       n_ext=float((size(extrema(tmp[*,i])))[1])
-      p=2d*length / n_ext
+      p=(emd_period_energy(tmp[*,i])).period
       e=(stddev(tmp[*,i]))^2
       pn = [pn, p]
       en = [en, e]

@@ -8,7 +8,7 @@ pro example_emd
   ;Caculate EMD modes
   modes = emd(x,shiftfactor=0.15,  maxsiftings=1d5)
   
-  ;Calcilate trend
+  ;Calculate trend
   trend_emd = modes[*,-1]
   
   
@@ -28,7 +28,7 @@ pro example_emd
   x=x-trend_emd 
   
   ;Estimating noise parameters from the tetrended signal
-  fit_fft = fft_alpha(x,dt,fap =0.005)
+  fit_fft = fft_alpha(x,dt,fap =0.01d)
 
   ;convert frequency to period
   period = 1d/fit_fft.frequency
@@ -60,7 +60,7 @@ pro example_emd
   conf_period = conf_c.period
   
   ;Recover "CLEAN" signal by summing up significant modes and the trend
-  emd_clean = emd_recover_signal(modes, conf_period, conf_up)
+  emd_clean = emd_reconstruct_signal(modes, conf_period, conf_up)
   
  ;------PLOTTING-------------- 
  !p.multi = [1,2,2] 
@@ -68,14 +68,18 @@ pro example_emd
      yrange = minmax(sp.energy)*[1d/20d,20d], title = 'EMD Ppower spectrum'
      
   
-  oplot, conf_period*dt,conf_c.mean_energy + conf_w.mean_energy, color =64, thick =2 
+  oplot, conf_period*dt,conf_c.mean_energy + conf_w.mean_energy, color =64, thick =2
+  oplot, conf_period*dt,conf_c.mean_energy > conf_w.mean_energy, color =64, thick =1, linesty=2
+ 
   oplot,conf_period*dt,conf_c.up + conf_w.up, color =250
-  oplot,conf_period*dt,conf_c.down + conf_w.down, color =250
+  oplot,conf_period*dt,conf_c.up > conf_w.up, color =250,thick =1, linesty=2
 
+  oplot,conf_period*dt,conf_c.down + conf_w.down, color =250
+  oplot,conf_period*dt,conf_c.down > conf_w.down, color =250,thick =1, linesty=2
   
   !p.multi = [2,2,2]
   
-  plot, t,x_original, title = 'Recovered Signal',ystyle = 1
+  plot, t,x_original, title = 'Reconstructed Signal',ystyle = 1
   oplot, t, emd_clean + trend_emd, color =64, thick =2
   oplot, t, trend_emd,thick =1, color =250;, linest = 1
   !p.multi = 0
