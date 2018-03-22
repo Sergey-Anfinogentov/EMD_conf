@@ -65,7 +65,7 @@ pro example_emd
  ;------PLOTTING-------------- 
  !p.multi = [1,2,2] 
   plot,sp.period*dt,sp.energy, /xlog, /ylog,psym = 1,$
-     yrange = minmax(sp.energy)*[1d/20d,20d], title = 'EMD Ppower spectrum'
+     yrange = minmax(sp.energy)*[1d/20d,20d], title = 'EMD Ppower spectrum', thick =2
      
   
   oplot, conf_period*dt,conf_c.mean_energy + conf_w.mean_energy, color =64, thick =2
