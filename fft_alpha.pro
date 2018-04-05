@@ -63,7 +63,7 @@ function noise_model_alpha_tn, p, dp, x=x, y=y, model = model, no_grad = no_grad
   max_y = max(y)
   min_y = 0d
   
-  outlier_prob = 1d/nf
+  outlier_prob = 5d/nf
   outlier_density = outlier_prob/(max_y-min_y)
   
   temp = exp(-y/model)/(model) * (1d - outlier_prob) + outlier_density
@@ -157,8 +157,8 @@ function fft_alpha, signal, dt, fap = fap
     message, 'white noise energy density:'+strcompress(exp(parms[0])*nf*(nt-1)/nt),/info;, exp(parinfo[0].limits)
     message, 'colored noise energy density:' +strcompress(exp(parms[1])*nf*(nt-1)/nt),/info;, exp(parinfo[1].limits)
     message, 'PL_index:'+strcompress((parms[2])),/info
-    message, 'original signal energy:'+strcompress(stddev(signal)^2),/info
-    message, 'fitted spectrum energy:'+strcompress(total(yfit)),/info
+    message, 'original signal energy density:'+strcompress(stddev(signal)^2),/info
+    message, 'fitted spectrum energy density:'+strcompress(total(yfit)),/info
 
 
     
