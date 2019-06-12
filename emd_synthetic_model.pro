@@ -1,3 +1,54 @@
+function emd_synthetic_trend, t, maximum_time = maximum_time, grow_time = graw_time, decay_time = decay_time
+  if not keyword_Set(decay_time) then decay_time = (max(t) - min(t))*0.3d
+  if not keyword_Set(maximum_time) then maximum_time = (max(t) - min(t))*0.3d +min(t)
+  if not keyword_Set(grow_time) then grow_time = (max(t) - min(t))*0.2d
+  result = t*0d
+  grow = (t le maximum_time) * exp(-((t-maximum_time)/grow_time)^2)
+  decay = (t gt maximum_time) * exp(-((t-maximum_time)/decay_time))
+  return, grow + decay
+end
+
+function emd_synthetic_non_stationary, t, start_period = start_period, period_change_rate = period_change_rate, start_time = start_time
+  duration = max(t) - min(t)
+  if not keyword_Set(start_time) then start_time = duration*0.3d +min(t)
+  
+  if not keyword_set(start_period) then start_period = duration * 0.2d
+  if not keyword_Set(period_change_time) then period_change_time = duration*0.5
+  period = start_period * exp(-(t - start_time)/period_change_time)
+  omega = 2d*!dpi/period
+  osc = sin(omega  * (t - start_time))
+  
+  decay_time = (max(t) - min(t))*0.5d
+  grow_time = (max(t) - min(t))*0.05d
+  
+  grow  = (t le start_time) * exp(-((t-start_time)/grow_time)^2)
+  decay = (t gt start_time) * exp(-((t-start_time)/decay_time))
+  
+  envelope = (t le start_time) * exp(-((t-start_time)/grow_time)^2) + (t gt start_time) * exp(-((t-start_time)/decay_time)^2)
+  
+  return, osc*envelope
+end
+
+function emd_synthetic_stationary, t, period = period, start_time = start_time
+  duration = max(t) - min(t)
+  if not keyword_Set(start_time) then start_time = duration*0.3d +min(t)
+
+  if not keyword_set(period) then period = duration * 0.15d
+
+  omega = 2d*!dpi/period
+  osc = sin(omega  * (t - start_time))
+
+  decay_time = (max(t) - min(t))*0.3d
+  grow_time = (max(t) - min(t))*0.05d
+
+  grow  = (t le start_time) * exp(-((t-start_time)/grow_time)^2)
+  decay = (t gt start_time) * exp(-((t-start_time)/decay_time))
+
+  envelope = (t le start_time) * exp(-((t-start_time)/grow_time)^2) + (t gt start_time) * exp(-((t-start_time)/decay_time)^2)
+
+  return, osc*envelope
+end
+
 ;+
   ; :Description:
   ;    This procedure creates a synthetic sugnal to be used as an example
@@ -29,23 +80,20 @@ pro emd_synthetic_model, t, x, x_clean, trend_clean, Num = Num, dt = dt, alpha =
   t=findgen(Num)*dt            ;ARTIFICIAL TIME ARRAY
   
   if keyword_set(non_stationary) then begin
-    trend = t^2*exp(-0.25*t)
-    trend/=max(trend)
-    signal=fltarr(Num)
-    for i=Num/6.,Num-1 do signal[i]=exp(-((t[i]-max(t)/4.)/(1.*period))^2)*sin((2d*!Pi/((period)*(0.95^t[i])))*(t[i]-t[Num/6.]))
-    ;signal=exp(-((t)/(max(t)*0.7))^2)*sin((2d*!Pi/((period)*(0.99^t)))*(t))
+    signal = emd_synthetic_non_stationary(t)
   endif else begin
-    trend=exp(-((t - 0.5d*max(t))/(max(t)*1d))^2)       ;ARTIFICIAL TREND
-    signal=sin((2*!Pi/Period)*t)*exp(-((t - 0.65d*max(t))/(max(t)*0.25))^2)        ;PRESCRIBED SINUSOIDAL SIGNAL
+    signal = emd_synthetic_stationary(t)     ;PRESCRIBED SINUSOIDAL SIGNAL
   endelse
+  
+  trend = emd_synthetic_trend(t)
  
   if n_elements(energy_white) eq 0 then energy_white = 0.1d                  ;Energy density in the    white   noise   relative to the trend energy density 
   if n_elements(energy_color) eq 0 then energy_color = 0.1d                 ;Energy density in the    colored noise   relative to the trend energy density 
-  if n_elements(energy_signal) eq 0 then energy_signal = 0.2d                     ;Energy density of the oscillatory signal relative to the trend energy density 
+  if n_elements(energy_signal) eq 0 then energy_signal = 0.05d                     ;Energy density of the oscillatory signal relative to the trend energy density 
   if n_elements(period) eq 0 then period = 7d                          ;PRESCRIBED PERIOD OF SIGNAL
   
   trend_energy = stddev(trend)^2
-  s =100l
+  s = random_seed();100l
   
   An0=sqrt(energy_white*trend_energy)
   An1=sqrt(energy_color*trend_energy)
