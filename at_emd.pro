@@ -92,7 +92,6 @@ function at_emd, x, show = show
    
    modes = modes[*,ind]
    sp = emd_energy_spectrum(modes)
-   stop
    plot,sp.period,sp.energy, /xlog, /ylog,psym = 1,$
      yrange = minmax(sp.energy)*[1d/20d,20d], title = 'EMD Power spectrum'
      
