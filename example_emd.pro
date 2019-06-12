@@ -17,7 +17,7 @@ pro example_emd
   
   
   ;Caculate EMD modes
-  modes = at_emd(x)
+  modes = at_emd(x, /show)
   ;modes = emd(x)
   
   ;Calcilate trend
@@ -39,8 +39,7 @@ pro example_emd
   x=x-trend_emd 
   
   ;Estimating noise parameters from the tetrended signal
-  
-  fit_fft = fft_alpha_ls(x,dt,fap =0.05)
+
   fit_fft = fft_alpha(x,dt,fap =0.05)
 
   ;convert frequency to period
