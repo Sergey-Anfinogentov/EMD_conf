@@ -24,5 +24,11 @@ function emd_energy_spectrum, modes, dt
     period[i]=(emd_period_energy(modes[*,i])).period
     energy[i] = stddev(modes[*,i])^2
   endfor
-  return,{period:period*dt,energy:energy}
+  
+  ; calculating spectral density
+  freq= 1d/(period*dt)
+  edges = [0.5,sqrt(freq[1:n-1] * freq[0:n-2]),1d/length]
+  spectral_density = energy/(edges[0:n-1]-edges[1:n])
+  
+  return,{period:period*dt,energy:energy,spectral_density:spectral_density}
 end

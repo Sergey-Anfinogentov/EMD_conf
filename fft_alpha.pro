@@ -32,6 +32,18 @@ pro grad_max, fun_name, parms, x = x, y = y
 
 end
 
+function model_spectrum,x,p
+  white_energy =  exp(p[0]);>0
+  color_energy =  exp(p[1]);>0
+  color_index  =  p[2]
+  nf = n_elements(x)
+
+  colored_noise = x ^ (-color_index)
+  colored_noise = color_energy* colored_noise/mean(colored_noise)
+
+  model = white_energy + colored_noise
+  return, model
+end
 
 ;+
   ; :Description:
@@ -63,7 +75,7 @@ function noise_model_alpha_tn, p, dp, x=x, y=y, model = model, no_grad = no_grad
   max_y = max(y)
   min_y = 0d
   
-  outlier_prob = 5d/nf
+  outlier_prob = 1d/nf
   outlier_density = outlier_prob/(max_y-min_y)
   
   temp = exp(-y/model)/(model) * (1d - outlier_prob) + outlier_density
@@ -146,7 +158,9 @@ function fft_alpha, signal, dt, fap = fap
    parms = parinfo.value
    grad_max, 'noise_model_alpha_tn', parms, x = frequency, y = pow
   
-  foo = noise_model_alpha_tn(parms, x=frequency, y=pow, model = yfit)
+  foo = noise_model_alpha_tn(parms, x=frequency[2:*], y=pow[2:*], model = yfit)
+  
+  yfit = model_spectrum( frequency, parms) 
   
     threshold = 1d - (1d - fap)^(1d/nf)
     
