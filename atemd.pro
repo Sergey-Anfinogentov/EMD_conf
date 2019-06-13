@@ -7,7 +7,7 @@ end
 
 
 
-function at_emd, x, show = show
+function atemd, x, show = show
  
   x_original = x
   x = x - mean(x)
