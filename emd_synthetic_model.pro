@@ -93,7 +93,7 @@ pro emd_synthetic_model, t, x, x_clean, trend_clean, Num = Num, dt = dt, alpha =
   if n_elements(period) eq 0 then period = 7d                          ;PRESCRIBED PERIOD OF SIGNAL
   
   trend_energy = stddev(trend)^2
-  s = random_seed();100l
+  s = systime(1)
   
   An0=sqrt(energy_white*trend_energy)
   An1=sqrt(energy_color*trend_energy)
