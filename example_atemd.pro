@@ -1,5 +1,5 @@
 
-pro example_emd
+pro example_atemd
  
 
   emd_synthetic_model,t, x, x_clean, trend_clean, Num = 400l, dt = 0.1d, alpha = 1.0d, energy_white=0.05d, energy_color=0.1d,$
