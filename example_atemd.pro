@@ -17,7 +17,7 @@ pro example_atemd
   
   
   ;Caculate EMD modes
-  modes = atemd(x, /show, residual = residual)
+  modes = atemd(x, residual = residual); /show,
   ;modes = emd(x)
   
   ;Calcilate trend
