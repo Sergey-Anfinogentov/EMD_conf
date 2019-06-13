@@ -3,7 +3,7 @@ pro example_emd
  
 
   emd_synthetic_model,t, x, x_clean, trend_clean, Num = 400l, dt = 0.1d, alpha = 1.0d, energy_white=0.05d, energy_color=0.1d,$
-    energy_signal = 0.15d, period = 12d, non_stationary = 1
+    energy_signal = 0.15d, period = 8d, non_stationary = 0
    dt = t[1] - t[0]
 ; 
   trend_clean -= mean(x)
@@ -17,7 +17,7 @@ pro example_emd
   
   
   ;Caculate EMD modes
-  modes = atemd(x, /show)
+  modes = atemd(x, /show, residual = residual)
   ;modes = emd(x)
   
   ;Calcilate trend
@@ -41,7 +41,7 @@ pro example_emd
   ;Estimating noise parameters from the tetrended signal
 
   fit_fft = fft_alpha(x,dt,fap =0.05)
-
+  ;stop
   ;convert frequency to period
   period = 1d/fit_fft.frequency
   
@@ -74,10 +74,15 @@ pro example_emd
   ;Recover "CLEAN" signal by summing up significant modes and the trend
   emd_clean = emd_reconstruct_signal(modes, conf_period, conf_up)
   
+  residual_period = (emd_period_energy(residual)).period
+  residual_energy = stddev(residual)^2
+  
  ;------PLOTTING-------------- 
  !p.multi = [1,2,2] 
   plot,sp.period*dt,sp.energy, /xlog, /ylog,psym = 1,$
      yrange = [min(sp.energy),max(sp.energy)]*[1d/20d,20d], title = 'EMD Power spectrum'
+  
+  oplot, [residual_period*dt], [residual_energy], psym = 2, color =150
      
   
   oplot, conf_period*dt,conf_c.mean_energy + conf_w.mean_energy, color =64, thick =2 
@@ -92,5 +97,5 @@ pro example_emd
    oplot, t, trend_emd,thick =1, color =250;, linest = 1
   !p.multi = 0
   ;---PLOTTING-----------
-
+;stop
 end
