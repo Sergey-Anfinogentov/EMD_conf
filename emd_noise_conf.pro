@@ -193,7 +193,7 @@ function emd_noise_conf, n, alpha, energy = energy, nsamples = nsamples, fap = f
   if not keyword_set(energy) then energy = 1d ; energy density
   if not keyword_set(nsamples) then nsamples =500l
   if not keyword_set(fap) then fap = 0.01d
-  confidence_level = 1d - fap
+  confidence_level = 1d - fap*0.5
   
   nmoden = []
   pn=[]
