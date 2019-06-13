@@ -3,25 +3,18 @@ pro example_atemd
  
 
   emd_synthetic_model,t, x, x_clean, trend_clean, Num = 400l, dt = 0.1d, alpha = 1.0d, energy_white=0.05d, energy_color=0.1d,$
-    energy_signal = 0.15d, period = 8d, non_stationary = 1
+    energy_signal = 0.15d, period = 8d, non_stationary = 0
    dt = t[1] - t[0]
 ; 
   trend_clean -= mean(x)
   x_clean -= mean(x)
   x -= mean(x)
   
+  
 
  ; x /= stddev(x)
   
   x_original = x
-  
-  
-  ;Caculate EMD modes
-  modes = atemd(x, residual = residual); /show,
-  ;modes = emd(x)
-  
-  ;Calcilate trend
-  trend_emd = emd_trend(modes)
   
   ;-------PLOTTING------------
   window,1,  xsize = 1000, ysize =700
@@ -30,10 +23,19 @@ pro example_atemd
   !p.multi = [0,2,2]
   plot, t, x, ystyle = 1, title = 'Original signal';, xrange=[0,110]
   loadct, 39
-   oplot, t, x_clean,thick =2, color =64
+  oplot, t, x_clean,thick =2, color =64
   loadct, 39
-   oplot, t, trend_clean,thick =1, color =250;, linest = 1
+  oplot, t, trend_clean,thick =1, color =250;, linest = 1
   ;------- END of PLOTTING---------
+  
+  ;Caculate EMD modes
+  modes = atemd(x, residual = residual); /show,
+  ;modes = emd(x)
+  
+  ;Calcilate trend
+  trend_emd = emd_trend(modes)
+  
+
 
   ;subtract trend from the signal
   x=x-trend_emd 
