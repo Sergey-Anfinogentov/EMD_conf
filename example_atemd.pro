@@ -3,7 +3,7 @@ pro example_atemd
  
 
   emd_synthetic_model,t, x, x_clean, trend_clean, Num = 400l, dt = 0.1d, alpha = 1.0d, energy_white=0.05d, energy_color=0.1d,$
-    energy_signal = 0.15d, period = 8d, non_stationary = 0
+    energy_signal = 0.15d, period = 8d, non_stationary = 1
    dt = t[1] - t[0]
 ; 
   trend_clean -= mean(x)
@@ -92,7 +92,7 @@ pro example_atemd
   
   !p.multi = [2,2,2]
   
-  plot, t,x_original, title = 'ReconstructedSignal',ystyle = 1;, xrange=[0,110]
+  plot, t,x_original, title = 'Reconstructed Signal',ystyle = 1;, xrange=[0,110]
    oplot, t, emd_clean + trend_emd, color =64, thick =2
    oplot, t, trend_emd,thick =1, color =250;, linest = 1
   !p.multi = 0
