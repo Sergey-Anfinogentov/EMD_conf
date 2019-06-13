@@ -47,7 +47,7 @@ pro example_emd
   
   ;------PLOTTING--------------
   plot,period, fit_fft.power,/xlog,/ylog,xstyle =1, ystyle =1$ 
-    ,yrange = minmax(fit_fft.power)*[0.1d,10d], xrange = minmax(period)*[0.5d,2d],$
+    ,yrange = [min(fit_fft.power),max(fit_fft.power)]*[0.1d,10d], xrange = [min(period),max(period)]*[0.5d,2d],$
      title = 'FFT Power'
   oplot,period, fit_fft.expectation, color = 64, thick =2
   oplot,period,fit_fft.confidence_level,  color =250
@@ -77,7 +77,7 @@ pro example_emd
  ;------PLOTTING-------------- 
  !p.multi = [1,2,2] 
   plot,sp.period*dt,sp.energy, /xlog, /ylog,psym = 1,$
-     yrange = minmax(sp.energy)*[1d/20d,20d], title = 'EMD Power spectrum'
+     yrange = [min(sp.energy),maxde(sp.energy)]*[1d/20d,20d], title = 'EMD Power spectrum'
      
   
   oplot, conf_period*dt,conf_c.mean_energy + conf_w.mean_energy, color =64, thick =2 
