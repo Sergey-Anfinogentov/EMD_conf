@@ -5,16 +5,7 @@ function logspace, x1, x2, n
   return, product([x1,replicate(dx,n-1)], /cumulative)
 end
 
-function emd_trend, modes
-  sp = emd_energy_spectrum(modes)
-  nt = (size(modes))[1]
-  ind = where(sp.period eq nt)
-  result = modes[*,0]*0
-  for i =0, n_elements(ind) -1 do begin
-    result += modes[*,ind[i]]
-  endfor
-  return, result
-end
+
 
 function at_emd, x, show = show
  
