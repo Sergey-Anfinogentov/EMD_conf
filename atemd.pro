@@ -7,7 +7,7 @@ end
 
 
 
-function atemd, x, show = show
+function atemd, x, show = show, residual = residual
  
   x_original = x
   x = x - mean(x)
@@ -23,7 +23,7 @@ function atemd, x, show = show
   
  chr = dblarr(n_sh) 
  result = list()
- threshold = 0.03
+ threshold = 0.01
  var_orig = stddev(x)^2
  if keyword_set(show) then begin
    window, 0
@@ -38,9 +38,11 @@ function atemd, x, show = show
      
      en = total(modes^2,1)
      nm = (size(modes))[2]
+     if (size(modes))[0] eq 1 then nm =1
      chr_0 = dblarr(nm)
      for j =0, nm-1 do begin
       chr_0[j] =  total((modes[*,j] - x)^2)
+      ;chr_0[j] =  -total((modes[*,j] - mean(modes[*,j]))^2)
      endfor
      foo = min(chr_0, mode_ind)    
       mode = modes[*,mode_ind] 
@@ -67,15 +69,20 @@ function atemd, x, show = show
    if stddev(x)^2 lt threshold*var_orig then break
  endfor
  
+ if keyword_set(show) then begin
+   window, k+1, title = 'residual'
+   plot, x,/psym
+ endif
+ 
  ;wdel, alll
   
   nm = n_elements(result)
   nt = n_elements(result[0])
-  modes = dblarr(nt, nm + 1)
+  modes = dblarr(nt, nm)
   for i =0,nm-1 do begin
     modes[*,i] = result[i]
   endfor
-  modes[*,nm] = x
+  residual = x
   
    sp = emd_energy_spectrum(modes)
    
@@ -83,9 +90,11 @@ function atemd, x, show = show
    
    modes = modes[*,ind]
    sp = emd_energy_spectrum(modes)
-   plot,sp.period,sp.energy, /xlog, /ylog,psym = 1,$
-     yrange = [min(sp.energy),max(sp.energy)]*[1d/20d,20d], title = 'EMD Power spectrum'
-     
+   if keyword_set(show) then begin
+     window, k+2
+     plot,sp.period,sp.energy, /xlog, /ylog,psym = 1,$
+       yrange = [min(sp.energy),max(sp.energy)]*[1d/20d,20d], title = 'EMD Power spectrum'
+   endif 
  x = x_original 
 return, modes
 
