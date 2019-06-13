@@ -20,7 +20,7 @@ function EMD_reconstruct_signal,modes, conf_period, conf_up
   conf_mod = interpol(conf_up,conf_period,mode_period)
   ind = where(mode_energy gt conf_mod and sp.period ne nt)
   emd_clean = dblarr(n_elements(modes[*,0]))
-  if ind[0] ne 0 then begin
+  if ind[0] ne -1 then begin
     for i =0, n_elements(ind) -1 do begin
       emd_clean += modes[*,ind[i]+1]
     endfor
