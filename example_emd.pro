@@ -20,21 +20,14 @@ pro example_emd
   modes = atemd(x, /show, residual = residual)
   ;modes = emd(x)
   
-  ;Calcilate trend
-  trend_emd = emd_trend(modes)
   
   ;-------PLOTTING------------
-  window,1,  xsize = 1000, ysize =700
   !p.BACKGROUND =255
   !p.color = 0
   !p.multi = [0,2,2]
-  plot, t, x, ystyle = 1, title = 'Original signal';, xrange=[0,110]
   loadct, 39
-   oplot, t, x_clean,thick =2, color =64
   loadct, 39
-   oplot, t, trend_clean,thick =1, color =250;, linest = 1
   ;------- END of PLOTTING---------
-
   ;subtract trend from the signal
   x=x-trend_emd 
   
@@ -85,10 +78,8 @@ pro example_emd
   oplot, [residual_period*dt], [residual_energy], psym = 2, color =150
      
   
-  oplot, conf_period*dt,conf_c.mean_energy + conf_w.mean_energy, color =64, thick =2 
   oplot,conf_period*dt,conf_c.up + conf_w.up, color =250
   oplot,conf_period*dt,conf_c.down + conf_w.down, color =250
-
   
   !p.multi = [2,2,2]
   
