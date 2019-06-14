@@ -53,7 +53,7 @@ end
   ; :Author: Sergey Anfinogentov (anfinogentov@iszf.irk.ru)
   ;-
 function chisqr_emd,x,e_mean,dof
-  h = 1d-5
+  h = 1d-5*stddev(x)
   x1  = x - h*0.5d
   x2 = x + h*0.5d
   
@@ -98,12 +98,12 @@ end
   ; :Author: Sergey Anfinogentov (anfinogentov@iszf.irk.ru)
   ;-
 function chisqr_fit,energy, hist
-  weights=replicate(1.0, N_ELEMENTS(hist))
+  weights=replicate(1.0, N_ELEMENTS(hist)) / sqrt(total(hist^2))
   
   foo = max(hist,ind)
   parms = [energy[ind], 1d]
   
-  h_fit=CURVEFIT( energy, hist, weigths, parms, fita=[1,1], FUNCTION_NAME= 'chisqr_fun',/noderivative, status = status)
+  h_fit=CURVEFIT( energy, hist, weights, parms, fita=[1,1], FUNCTION_NAME= 'chisqr_fun',/noderivative, status = status)
   
 
 
