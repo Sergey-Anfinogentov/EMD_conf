@@ -139,7 +139,7 @@ end
 function emd,data, shiftfactor = shiftfactor, maxsiftings = maxsiftings, epsilon = epsilon
   if not keyword_set(shiftfactor) then shiftfactor =0.2
   if not keyword_set(maxsiftings) then maxsiftings =4096
-  if not keyword_set(epsilon) then epsilon =1d-4*stddev(data)
+  if not keyword_set(epsilon) then epsilon =1d-4
   x = double(data)
   n = n_elements(data)
   n_modes = 50
