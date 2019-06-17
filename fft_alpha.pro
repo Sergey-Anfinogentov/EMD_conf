@@ -158,7 +158,7 @@ function fft_alpha, signal, dt, fap = fap
    parms = parinfo.value
    grad_max, 'noise_model_alpha_tn', parms, x = frequency, y = pow
   
-  foo = noise_model_alpha_tn(parms, x=frequency[1:*], y=pow[1:*], model = yfit)
+  foo = noise_model_alpha_tn(parms, x=frequency[2:*], y=pow[2:*], model = yfit)
   
   yfit = model_spectrum( frequency, parms) 
   
